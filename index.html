@@ -1,0 +1,167 @@
+<h2 class="sr-only">Tteokbokki World — Korean rice cake product directory for overseas buyers</h2>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.lb{padding:4px 11px;border:1.5px solid var(--color-border-secondary);background:transparent;cursor:pointer;font-size:12px;font-weight:600;border-radius:var(--border-radius-md);color:var(--color-text-secondary);}
+.lb.act{background:#E24B4A;border-color:#501313;color:#fff;}
+.cb{padding:5px 13px;border:1.5px solid var(--color-border-secondary);background:transparent;cursor:pointer;font-size:12px;font-weight:600;border-radius:var(--border-radius-md);color:var(--color-text-secondary);}
+.cb.act{background:#2C2C2A;border-color:#2C2C2A;color:#F1EFE8;}
+.sb{padding:4px 9px;border:1.5px solid var(--color-border-secondary);background:transparent;cursor:pointer;font-size:11px;font-weight:700;border-radius:var(--border-radius-md);color:var(--color-text-secondary);}
+.sb.act{background:#E24B4A;border-color:#501313;color:#fff;}
+.card{border:2px solid #2C2C2A;border-radius:10px;overflow:hidden;background:var(--color-background-primary);transition:transform .15s ease;}
+.card:hover{transform:rotate(-1.5deg) scale(1.02);}
+.bb{flex:1;padding:6px 4px;font-size:11px;font-weight:700;text-align:center;text-decoration:none;border-radius:4px;cursor:pointer;display:block;}
+.bbr{background:#E24B4A;color:#fff;}
+.bba{background:#EF9F27;color:#412402;}
+</style>
+
+<div style="display:flex;justify-content:flex-end;gap:6px;padding:8px 16px;background:var(--color-background-secondary);border-bottom:2px solid #2C2C2A;">
+  <button class="lb act" data-l="en" onclick="setL('en')">EN</button>
+  <button class="lb" data-l="ko" onclick="setL('ko')">한국어</button>
+  <button class="lb" data-l="ja" onclick="setL('ja')">日本語</button>
+</div>
+
+<div style="background:#E24B4A;border-bottom:3px solid #501313;padding:1.75rem 1.5rem;text-align:center;">
+  <div style="font-size:2rem;font-weight:900;color:#fff;letter-spacing:4px;font-family:var(--font-sans);">TTEOKBOKKI</div>
+  <div style="font-size:2.8rem;font-weight:900;color:#FAEEDA;letter-spacing:4px;font-family:var(--font-sans);margin-top:-6px;line-height:1;">WORLD</div>
+  <p id="hs" style="color:#FCEBEB;font-size:0.9rem;margin-top:0.6rem;">Korea's #1 Street Food — Find Your Perfect Pack</p>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:8px;padding:0.875rem 1.25rem;background:var(--color-background-primary);border-bottom:1.5px solid var(--color-border-secondary);align-items:center;">
+  <div id="cf" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:6px;">
+    <span id="sl" style="font-size:12px;color:var(--color-text-secondary);white-space:nowrap;">Spice:</span>
+    <div id="sf" style="display:flex;gap:4px;"></div>
+  </div>
+</div>
+
+<div id="grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:14px;padding:1.25rem;"></div>
+
+<div style="text-align:center;padding:1.25rem 1.5rem;border-top:1.5px solid var(--color-border-secondary);">
+  <p id="ft" style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px;">Tteokbokki World · Curated Korean street food for global fans</p>
+  <p id="af" style="font-size:11px;color:var(--color-text-tertiary);line-height:1.6;max-width:540px;margin:0 auto;"></p>
+</div>
+
+<script>
+const prods=[
+  {id:1,cat:'original',spice:3,bg:'#E24B4A',fg:'#fff',abbr:'OG',
+   nm:{en:'Classic Tteokbokki',ko:'신당동 떡볶이',ja:'クラシック炒め餅'},
+   ds:{en:'Chewy rice cakes in sweet-spicy gochujang sauce. The Seoul street food legend.',ko:'쫄깃한 떡에 달콤매콤한 고추장 소스. 서울의 정통 맛.',ja:'甘辛コチュジャンソースに弾力ある餅。ソウルの定番。'},
+   cu:'https://www.coupang.com/np/search?q=오리지널+떡볶이',am:'https://amzn.to/4tUNEdS'},
+  {id:2,cat:'cheese',spice:2,bg:'#EF9F27',fg:'#412402',abbr:'CH',
+   nm:{en:'Cheese Tteokbokki',ko:'치즈 떡볶이',ja:'チーズ炒め餅'},
+   ds:{en:'Spicy rice cakes topped with creamy melted cheese. Family favorite.',ko:'매콤한 떡에 녹진한 치즈 토핑. 온 가족이 좋아해요.',ja:'スパイシーな餅にとろけるチーズ。家族全員のお気に入り。'},
+   cu:'https://www.coupang.com/np/search?q=치즈+떡볶이',am:'https://amzn.to/4vImbxN'},
+  {id:3,cat:'seafood',spice:3,bg:'#185FA5',fg:'#fff',abbr:'SF',
+   nm:{en:'Seafood Tteokbokki',ko:'해물 떡볶이',ja:'海鮮炒め餅'},
+   ds:{en:'Shrimp, squid & clams in a rich, spicy broth. Deep coastal flavor.',ko:'새우, 오징어, 조개 가득한 매콤 국물.',ja:'エビ・イカ・アサリたっぷりのスパイシースープ。'},
+   cu:'https://www.coupang.com/np/search?q=해물+떡볶이',am:'https://www.amazon.com/s?k=seafood+tteokbokki&tag=jayuniverse01-20'},
+  {id:4,cat:'jjajang',spice:1,bg:'#2C2C2A',fg:'#F1EFE8',abbr:'JJ',
+   nm:{en:'Jjajang Tteokbokki',ko:'짜장 떡볶이',ja:'ジャジャン炒め餅'},
+   ds:{en:'Black bean sauce on chewy rice cakes. Savory, mild & kid-friendly.',ko:'짜장 소스와 쫄깃한 떡. 맵지 않고 고소해요.',ja:'黒豆ソースと弾力ある餅。辛くなく旨味たっぷり。'},
+   cu:'https://www.coupang.com/np/search?q=짜장+떡볶이',am:'https://amzn.to/41LxYOc'},
+  {id:5,cat:'original',spice:5,bg:'#501313',fg:'#fff',abbr:'5X',
+   nm:{en:'Buldak Tteokbokki',ko:'불닭 떡볶이',ja:'火鶏炒め餅'},
+   ds:{en:'Extreme fire heat. Only for the truly brave. Korea\'s spiciest pack.',ko:'극강의 매운맛. 진짜 용감한 분들만 도전하세요.',ja:'超激辛。本当に勇気ある方だけ挑戦してください。'},
+   cu:'https://www.coupang.com/np/search?q=불닭+떡볶이',am:'https://amzn.to/4cWyvmB'},
+  {id:6,cat:'original',spice:1,bg:'#633806',fg:'#fff',abbr:'RY',
+   nm:{en:'Royal Tteokbokki',ko:'궁중 떡볶이',ja:'宮中炒め餅'},
+   ds:{en:'Joseon Dynasty royal recipe. Soy-based, savory, zero spice.',ko:'조선 궁중 레시피. 간장 소스, 매운맛 없음.',ja:'朝鮮王朝の宮廷レシピ。醤油ベースで全く辛くない。'},
+   cu:'https://www.coupang.com/np/search?q=궁중+떡볶이',am:'https://amzn.to/492rChd'},
+  {id:7,cat:'original',spice:3,bg:'#D85A30',fg:'#fff',abbr:'RB',
+   nm:{en:'Rabokki',ko:'라볶이',ja:'ラボッキ'},
+   ds:{en:'Rice cakes + ramen noodles in spicy sauce. A street food legend.',ko:'떡 + 라면의 조합. 분식집 불변의 클래식.',ja:'餅＋ラーメン麺のコンビ。屋台フードの伝説。'},
+   cu:'https://www.coupang.com/np/search?q=라볶이',am:'https://amzn.to/488MF1q'},
+  {id:8,cat:'rose',spice:2,bg:'#D4537E',fg:'#fff',abbr:'RS',
+   nm:{en:'Rosé Tteokbokki',ko:'로제 떡볶이',ja:'ロゼ炒め餅'},
+   ds:{en:'Creamy tomato meets gochujang. Trendy, mild & absolutely delicious.',ko:'크림 토마토 + 고추장의 트렌디한 퓨전.',ja:'クリームトマト×コチュジャン。今話題の一品。'},
+   cu:'https://www.coupang.com/np/search?q=로제+떡볶이',am:'https://amzn.to/491Upm2'}
+];
+
+const ui={
+  en:{cats:{all:'All',original:'Original',cheese:'Cheese',seafood:'Seafood',jjajang:'Jjajang',rose:'Rosé'},
+      sp:'Spice:',sa:'All',sm:'Mild',sme:'Medium',sh:'Hot',
+      hs:"Korea's #1 Street Food — Find Your Perfect Pack",
+      cu:'Coupang',am:'Amazon',
+      ft:'Tteokbokki World · Curated Korean street food for global fans',
+      af:'Tteokbokki World is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.com.'},
+  ko:{cats:{all:'전체',original:'오리지널',cheese:'치즈',seafood:'해물',jjajang:'짜장',rose:'로제'},
+      sp:'맵기:',sa:'전체',sm:'순한맛',sme:'보통',sh:'매운맛',
+      hs:'대한민국 국민 분식 · 나에게 딱 맞는 떡볶이를 찾아보세요',
+      cu:'쿠팡',am:'아마존',
+      ft:'Tteokbokki World · 해외 팬을 위한 떡볶이 큐레이션',
+      af:'이 사이트는 아마존 제휴 마케팅 프로그램에 참여하고 있습니다. 링크를 통해 구매 시 수수료가 발생할 수 있습니다.'},
+  ja:{cats:{all:'全て',original:'オリジナル',cheese:'チーズ',seafood:'海鮮',jjajang:'ジャジャン',rose:'ロゼ'},
+      sp:'辛さ:',sa:'全て',sm:'マイルド',sme:'ふつう',sh:'辛口',
+      hs:'韓国No.1ストリートフード · あなたにぴったりの炒め餅を見つけよう',
+      cu:'Coupang',am:'Amazon',
+      ft:'Tteokbokki World · 海外ファンのためのキュレーション',
+      af:'当サイトはAmazonアソシエイト・プログラムに参加しています。リンクを経由してご購入いただいた場合、紹介料を受け取ることがあります。'}
+};
+
+let lang='en',cat='all',spf='all';
+
+function setL(l){
+  lang=l;
+  document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('act',b.dataset.l===l));
+  document.getElementById('hs').textContent=ui[l].hs;
+  document.getElementById('sl').textContent=ui[l].sp;
+  document.getElementById('ft').textContent=ui[l].ft;
+  document.getElementById('af').textContent=ui[l].af;
+  rCat();rSpice();rGrid();
+}
+
+function rCat(){
+  const t=ui[lang];
+  document.getElementById('cf').innerHTML=['all','original','cheese','seafood','jjajang','rose']
+    .map(c=>`<button class="cb${cat===c?' act':''}" onclick="setCat('${c}')">${t.cats[c]}</button>`).join('');
+}
+
+function rSpice(){
+  const t=ui[lang];
+  document.getElementById('sf').innerHTML=[['all',t.sa],['mild',t.sm],['med',t.sme],['hot',t.sh]]
+    .map(([k,v])=>`<button class="sb${spf===k?' act':''}" onclick="setSp('${k}')">${v}</button>`).join('');
+}
+
+function setCat(c){cat=c;rCat();rGrid();}
+function setSp(s){spf=s;rSpice();rGrid();}
+
+function match(s){
+  if(spf==='all')return true;
+  if(spf==='mild')return s<=2;
+  if(spf==='med')return s===3;
+  if(spf==='hot')return s>=4;
+  return true;
+}
+
+function rGrid(){
+  const t=ui[lang];
+  const list=prods.filter(p=>(cat==='all'||p.cat===cat)&&match(p.spice));
+  if(!list.length){
+    document.getElementById('grid').innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:2.5rem;color:var(--color-text-secondary);font-size:14px;">No products found 🌶️</div>`;
+    return;
+  }
+  document.getElementById('grid').innerHTML=list.map(p=>{
+    const dots=Array.from({length:5},(_,i)=>
+      `<div style="width:11px;height:11px;border-radius:50%;background:${i<p.spice?'#E24B4A':'transparent'};border:1.5px solid #A32D2D;"></div>`
+    ).join('');
+    return `<div class="card">
+      <div style="height:108px;background:${p.bg};display:flex;align-items:center;justify-content:center;border-bottom:2px solid #2C2C2A;position:relative;">
+        <span style="font-size:2rem;font-weight:900;color:${p.fg};letter-spacing:3px;">${p.abbr}</span>
+        <div style="position:absolute;top:8px;right:8px;background:#fff;border:1.5px solid #2C2C2A;border-radius:10px;font-size:9px;font-weight:700;padding:2px 7px;color:#2C2C2A;">${t.cats[p.cat]}</div>
+      </div>
+      <div style="padding:10px 12px;">
+        <div style="font-size:10px;color:var(--color-text-secondary);margin-bottom:2px;">${p.nm.ko}</div>
+        <div style="font-size:14px;font-weight:700;color:var(--color-text-primary);margin-bottom:5px;line-height:1.25;">${p.nm[lang]}</div>
+        <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.4;margin-bottom:9px;">${p.ds[lang]}</div>
+        <div style="display:flex;gap:3px;align-items:center;margin-bottom:9px;">${dots}</div>
+        <div style="display:flex;gap:6px;">
+          <a href="${p.cu}" class="bb bbr" target="_blank">${t.cu}</a>
+          <a href="${p.am}" class="bb bba" target="_blank">${t.am}</a>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+rCat();rSpice();rGrid();
+</script>
